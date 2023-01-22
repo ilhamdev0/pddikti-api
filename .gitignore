@@ -1,0 +1,6 @@
+env/
+root/
+node_modules/
+
+.env
+.next/
