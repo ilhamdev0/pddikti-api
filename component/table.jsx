@@ -4,18 +4,18 @@ export function TableMahasiswa({ content }) {
             <table className="table w-full">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Nama</th>
-                        <th>NIM/NPM</th>
-                        <th>Nama Lembaga</th>
-                        <th>Prodi</th>
+                        <th className="bg-gray-200 dark:bg-slate-700"></th>
+                        <th className="bg-gray-200 dark:bg-slate-700">Nama</th>
+                        <th className="bg-gray-200 dark:bg-slate-700">NIM/NPM</th>
+                        <th className="bg-gray-200 dark:bg-slate-700">Nama Lembaga</th>
+                        <th className="bg-gray-200 dark:bg-slate-700">Prodi</th>
                     </tr>
                 </thead>
                 <tbody>
                     {content.map((data, index) => (
                         <tr key={index} className="hover">
                             <th></th>
-                            <td><a className="link link-primary link-hover" href={data.link} target="_blank">{data.nama}</a></td>
+                            <td><a className="link link-primary dark:link-accent link-hover" href={data.link} target="_blank">{data.nama}</a></td>
                             <td>{data.nim}</td>
                             <td>{data.pt}</td>
                             <td>{data.prodi}</td>
@@ -33,18 +33,18 @@ export function TableDosen({ content }) {
             <table className="table w-full">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Nama</th>
-                        <th>NIDN</th>
-                        <th>Nama Lembaga</th>
-                        <th>Prodi</th>
+                        <th className="bg-gray-200 dark:bg-slate-700"></th>
+                        <th className="bg-gray-200 dark:bg-slate-700">Nama</th>
+                        <th className="bg-gray-200 dark:bg-slate-700">NIDN</th>
+                        <th className="bg-gray-200 dark:bg-slate-700">Nama Lembaga</th>
+                        <th className="bg-gray-200 dark:bg-slate-700">Prodi</th>
                     </tr>
                 </thead>
                 <tbody>
                     {content.map((data, index) => (
                         <tr key={index} className="hover">
                             <th></th>
-                            <td><a className="link link-primary link-hover" href={data.link} target="_blank">{data.nama}</a></td>
+                            <td><a className="link link-primary dark:link-accent link-hover" href={data.link} target="_blank">{data.nama}</a></td>
                             <td>{data.nidn}</td>
                             <td>{data.pt}</td>
                             <td>{data.prodi}</td>
