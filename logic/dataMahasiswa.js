@@ -9,6 +9,7 @@ const splitter = (text) => {
     if (text.includes("Cari kata kunci")) {
         return {
             nama: "-",
+            nim: "-",
             pt: "-",
             prodi: "-"
         }
