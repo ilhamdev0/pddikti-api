@@ -11,7 +11,7 @@ export default function HomePage() {
     const [loadingMahasiswa, setLoadingMahasiswa] = useState(false)
     const [loadingDosen, setLoadingDosen] = useState(false)
 
-    //filter
+    //toggler
     const [showMahasiswa, setShowMahasiswa] = useState(true)
     const [showDosen, setShowDosen] = useState(false)
 
@@ -41,7 +41,7 @@ export default function HomePage() {
 
         const nama = String(e.target.elements.nama.value);
 
-        if(nama.length <= 0){
+        if (nama.length <= 0) {
             setError("Nama harus diisi")
         }
 
