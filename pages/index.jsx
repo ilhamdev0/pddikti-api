@@ -4,42 +4,69 @@ import { processor as processorMahasiswa } from 'logic/dataMahasiswa'
 import { processor as processorDosen } from 'logic/dataDosen'
 import { TableMahasiswa, TableDosen } from 'component/table'
 
+const initialreducerMahasiswa = {
+    spinner: false,
+    toggler: true,
+    data: false,
+};
+
+const initialreducerDosen = {
+    spinner: false,
+    toggler: false,
+    data: false,
+};
+
+const reducerMahasiswa = (state, action) => {
+    switch (action.type) {
+        case 'spinner':
+            return { ...state, spinner: action.payload };
+        case 'toggler':
+            return { ...state, toggler: !state.toggler };
+        case 'data':
+            return { ...state, data: action.payload };
+        default:
+            throw new Error(`action type tidak diketahui: ${action.type}`);
+    }
+}
+
+const reducerDosen = (state, action) => {
+    switch (action.type) {
+        case 'spinner':
+            return { ...state, spinner: action.payload };
+        case 'toggler':
+            return { ...state, toggler: !state.toggler };
+        case 'data':
+            return { ...state, data: action.payload };
+        default:
+            throw new Error(`action type tidak diketahui: ${action.type}`);
+    }
+}
+
 export default function HomePage() {
     const [error, setError] = useState(false)
 
-    //spinner
-    const [loadingMahasiswa, setLoadingMahasiswa] = useState(false)
-    const [loadingDosen, setLoadingDosen] = useState(false)
-
-    //toggler
-    const [showMahasiswa, setShowMahasiswa] = useState(true)
-    const [showDosen, setShowDosen] = useState(false)
+    const [mahasiswa, dispatchMahasiswa] = useReducer(reducerMahasiswa, initialreducerMahasiswa);
+    const [dosen, dispatchDosen] = useReducer(reducerDosen, initialreducerDosen);
 
     useEffect(() => {
         console.info("https://ilhamdev.pages.dev");
     }, [])
 
-    const toggleShowMahasiswa = () => {
-        setShowMahasiswa(current => !current)
-    }
+    function pre() {
+        dispatchMahasiswa({ type: 'spinner', payload: true })
+        dispatchDosen({ type: 'spinner', payload: true })
 
-    const toggleShowDosen = () => {
-        setShowDosen(current => !current)
-    }
-
-    const pre = () => {
-        setLoadingMahasiswa(true)
-        setLoadingDosen(true)
         setError(false)
-        setMahasiswa(false)
-        setDosen(false)
+
+        dispatchMahasiswa({ type: 'data', payload: false })
+        dispatchDosen({ type: 'data', payload: false })
     }
 
-    const cari = (e) => {
-        e.preventDefault();
+    function cari(e) {
+        e.preventDefault()
         pre()
 
-        const nama = String(e.target.elements.nama.value);
+        const nama = String(e.target.elements.nama.value)
 
         if (nama.length <= 0) {
             setError("Nama harus diisi")
@@ -47,24 +74,30 @@ export default function HomePage() {
 
         getMahasiswa(nama)
             .then(res => {
-                setMahasiswa(processorMahasiswa(res.data.mahasiswa))
+                dispatchMahasiswa({
+                    type: 'data',
+                    payload: processorMahasiswa(res.data.mahasiswa)
+                })
             })
             .catch(err => {
                 setError("Harap Coba Lagi")
                 console.error(err.message)
             }).finally(() => {
-                setLoadingMahasiswa(false)
+                dispatchMahasiswa({ type: 'spinner', payload: false })
             })
 
         getDosen(nama)
             .then(res => {
-                setDosen(processorDosen(res.data.dosen))
+                dispatchDosen({
+                    type: 'data',
+                    payload: processorDosen(res.data.dosen)
+                })
             })
             .catch(err => {
                 setError("Harap Coba Lagi")
                 console.error(err.message)
             }).finally(() => {
-                setLoadingDosen(false)
+                dispatchDosen({ type: 'spinner', payload: false })
             })
     }
 
@@ -91,7 +124,7 @@ export default function HomePage() {
                     <button type='submit' className="btn btn-primary dark:btn-info" >Cari!</button>
                 </form>
 
-                {loadingMahasiswa || loadingDosen ?
+                {mahasiswa.spinner || dosen.spinner ?
                     <div role="status" className='w-10 self-start pt-2'>
                         <svg aria-hidden="true" className="inline mr-2 text-gray-200 dark:text-gray-600 animate-spin fill-blue-600 dark:fill-slate-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -107,13 +140,17 @@ export default function HomePage() {
                 <div className="form-control w-36">
                     <label className="label cursor-pointer">
                         <span className="label-text">Mahasiswa</span>
-                        <input type="checkbox" defaultChecked={true} onChange={toggleShowMahasiswa} className="toggle toggle-primary dark:toggle-accent" />
+                        <input type="checkbox" defaultChecked={true} onChange={
+                            () => dispatchMahasiswa({ type: 'toggler' })
+                        } className="toggle toggle-primary dark:toggle-accent" />
                     </label>
                 </div>
                 <div className="form-control w-28">
                     <label className="label cursor-pointer">
                         <span className="label-text">Dosen</span>
-                        <input type="checkbox" onChange={toggleShowDosen} className="toggle toggle-primary dark:toggle-accent" />
+                        <input type="checkbox" onChange={
+                            () => dispatchDosen({ type: 'toggler' })
+                        } className="toggle toggle-primary dark:toggle-accent" />
                     </label>
                 </div>
             </div>
@@ -121,18 +158,18 @@ export default function HomePage() {
             <hr />
 
             <div className='flex flex-col gap-y-14 py-8'>
-                {mahasiswa && showMahasiswa ?
+                {mahasiswa.data && mahasiswa.toggler ?
                     <section>
                         <p className='text-2xl uppercase text-center py-4'>Data Mahasiswa</p>
-                        <TableMahasiswa content={mahasiswa} />
+                        <TableMahasiswa content={mahasiswa.data} />
                     </section> :
                     null
                 }
 
-                {dosen && showDosen ?
+                {dosen.data && dosen.toggler ?
                     <section>
                         <p className='text-2xl uppercase text-center py-4'>Data Dosen</p>
-                        <TableDosen content={dosen} />
+                        <TableDosen content={dosen.data} />
                     </section> :
                     null
                 }
