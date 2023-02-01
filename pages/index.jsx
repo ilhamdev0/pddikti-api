@@ -102,7 +102,7 @@ export default function HomePage() {
     }
 
     return (
-        <main className={`py-4 px-2 bg-zinc-100 dark:bg-zinc-800 ${!showMahasiswa && !showDosen || !mahasiswa && !dosen ? "h-screen" : ""}`}>
+        <main className={`py-4 px-2 bg-zinc-100 dark:bg-zinc-800 h-screen ${(mahasiswa.data && mahasiswa.toggler) || dosen.toggler ? 'h-[120vh]' : ''} ${mahasiswa.toggler && dosen.toggler ? '!h-[205vh]' : ''}`}>
             {error ?
                 <div className="alert alert-error shadow-lg mb-4">
                     <div>
