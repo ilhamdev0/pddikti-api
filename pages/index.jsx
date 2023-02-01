@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import { getMahasiswa, getDosen } from 'logic/apiClient'
 import { processor as processorMahasiswa } from 'logic/dataMahasiswa'
 import { processor as processorDosen } from 'logic/dataDosen'
@@ -15,9 +15,9 @@ export default function HomePage() {
     const [showMahasiswa, setShowMahasiswa] = useState(true)
     const [showDosen, setShowDosen] = useState(false)
 
-    //data
-    const [mahasiswa, setMahasiswa] = useState(false)
-    const [dosen, setDosen] = useState(false)
+    useEffect(() => {
+        console.info("https://ilhamdev.pages.dev");
+    }, [])
 
     const toggleShowMahasiswa = () => {
         setShowMahasiswa(current => !current)
