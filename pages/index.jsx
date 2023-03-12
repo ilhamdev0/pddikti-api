@@ -4,32 +4,19 @@ import { processor as processorMahasiswa } from 'logic/dataMahasiswa'
 import { processor as processorDosen } from 'logic/dataDosen'
 import { TableMahasiswa, TableDosen } from 'component/table'
 
-const initialreducerMahasiswa = {
+const reducerMahasiswa = {
     spinner: false,
     toggler: true,
     data: false,
 };
 
-const initialreducerDosen = {
+const reducerDosen = {
     spinner: false,
     toggler: false,
     data: false,
 };
 
-const reducerMahasiswa = (state, action) => {
-    switch (action.type) {
-        case 'spinner':
-            return { ...state, spinner: action.payload };
-        case 'toggler':
-            return { ...state, toggler: !state.toggler };
-        case 'data':
-            return { ...state, data: action.payload };
-        default:
-            throw new Error(`action type tidak diketahui: ${action.type}`);
-    }
-}
-
-const reducerDosen = (state, action) => {
+const reducer = (state, action) => {
     switch (action.type) {
         case 'spinner':
             return { ...state, spinner: action.payload };
@@ -45,8 +32,8 @@ const reducerDosen = (state, action) => {
 export default function HomePage() {
     const [error, setError] = useState(false)
 
-    const [mahasiswa, dispatchMahasiswa] = useReducer(reducerMahasiswa, initialreducerMahasiswa);
-    const [dosen, dispatchDosen] = useReducer(reducerDosen, initialreducerDosen);
+    const [mahasiswa, dispatchMahasiswa] = useReducer(reducer, reducerMahasiswa);
+    const [dosen, dispatchDosen] = useReducer(reducer, reducerDosen);
 
     useEffect(() => {
         console.info("https://ilhamdev.pages.dev");
